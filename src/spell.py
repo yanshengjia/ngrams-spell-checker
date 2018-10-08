@@ -1,8 +1,10 @@
-# !/usr/bin/python
+# !/usr/bin/env python3
 # -*- coding:utf-8 -*-  
 # @author: Shengjia Yan
-# @date: 2017-11-17 Friday
+# @date: 2018-10-08 Monday
 # @email: i@yanshengjia.com
+# Copyright @ Shengjia Yan. All Rights Reserved.
+
 
 import re
 import json
@@ -35,7 +37,7 @@ class SpellChecker:
     def load_lm(self):
         logger.info('Loading n-grams language model...')
         t0 = time()
-        with open(self.lm_path) as lm_json:
+        with codecs.open(self.lm_path, mode='r', encoding='utf8') as lm_json:
             lm = json.load(lm_json)
         logger.info("   Done in {:.3f}s".format(time() - t0))
         return lm

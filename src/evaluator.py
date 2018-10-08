@@ -1,13 +1,15 @@
-# !/usr/bin/python
+# !/usr/bin/env python3
 # -*- coding:utf-8 -*-  
 # @author: Shengjia Yan
-# @date: 2018-07-06 Friday
+# @date: 2018-10-08 Monday
 # @email: i@yanshengjia.com
 # Copyright @ Shengjia Yan. All Rights Reserved.
+
 
 import re
 import json
 import codecs
+from time import time
 from collections import Counter
 from spell import *
 
@@ -31,7 +33,7 @@ class Evaluator:
         self.result = []
 
     def _load_dataset(self, data_path):
-        with open(data_path, 'r') as in_file:
+        with codecs.open(data_path, 'r', encoding='utf8', errors='ignore') as in_file:
             data_set = []
             for line in in_file:
                 line = line.strip()
@@ -92,10 +94,34 @@ class Evaluator:
     def get_bad_case(self):
         pass
 
+    def detection_speedtest(self):
+        t0 = time()
+        word_counter = 0
+
+        case_num = 0
+        for case in self.test_set:
+            print(case_num)
+            error_sentences = case['ERRORSENTS']
+            for sentence_dict in error_sentences:
+                sentence = sentence_dict['SENT']
+                word_list = self.spell_checker.words(sentence)
+                sentence_size = len(word_list)
+                word_counter += sentence_size
+                for word in word_list:
+                    self.spell_checker.detect(word)
+            case_num += 1
+
+        t1 = time()
+        logger.info("word sum: {}".format(word_counter))
+        logger.info("detection time: {:.3f}s".format( t1 - t0 ))
+        logger.info("detection time (per 100 words): {:.10f}s".format( (time() - t0) * 100.0 / word_counter ))
+
 
 def main():
     evaluator = Evaluator()
-    evaluator.evaluate()
+    # evaluator.evaluate()
+    evaluator.detection_speedtest()
+
 
 if __name__ == '__main__':
     main()
