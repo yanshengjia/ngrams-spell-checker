@@ -40,6 +40,10 @@ class SpellChecker:
         logger.info("   Done in {:.3f}s".format(time() - t0))
         return lm
 
+    def get_dict_size(self):
+        unique_word_number = len(self.word_dict)
+        return unique_word_number
+
     def words(self, text):
         return re.findall(r'\w+', text.lower())
     
@@ -201,4 +205,13 @@ class SpellChecker:
                 typo_dict['length'] = token_dict['length']
                 typo_list.append(typo_dict)
         return typo_list
+
+
+def main():
+    speller = SpellChecker()
+    dict_size = speller.get_dict_size()
+    print(dict_size)
+
+if __name__ == '__main__':
+    main()
 
